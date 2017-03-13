@@ -1,22 +1,24 @@
 angular.module('app.controllers', [])
 
-.controller('homeCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+  .controller('homeCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+    // You can include any angular dependencies as parameters for this function
+    // TIP: Access Route Parameters for your page via $stateParams.parameterName
+    function($scope, $stateParams) {
 
 
-}])
+    }
+  ])
 
-.controller('menuCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+  .controller('menuCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+    // You can include any angular dependencies as parameters for this function
+    // TIP: Access Route Parameters for your page via $stateParams.parameterName
+    function($scope, $stateParams) {
 
 
-}])
+    }
+  ])
 
-.controller('loginCtrl', function($state, $rootScope, $scope, LoginService, $ionicHistory, $ionicPopup) {
+  .controller('loginCtrl', function($state, $rootScope, $scope, LoginService, $ionicHistory, $ionicPopup) {
 
     var vm = this;
 
@@ -88,70 +90,117 @@ function ($scope, $stateParams) {
   })
 
   .controller('signupCtrl', function ($state, $rootScope, LoginService) {
-        var vm = this;
+      var vm = this;
 
-        vm.signup = signup;
+      vm.signup = signup;
 
-        function signup(){
-          vm.errorMessage = '';
+      function signup(){
+        vm.errorMessage = '';
 
-          LoginService.signup(vm.firstName, vm.lastName, vm.email, vm.password, vm.again)
-              .then(function (response) {
-                // success
-                onLogin();
-              }, function (reason) {
-                if(reason.data.error_description !== undefined){
-                  vm.errorMessage = reason.data.error_description;
-                }
-                else{
-                  vm.errorMessage = reason.data;
-                }
+        LoginService.signup(vm.firstName, vm.lastName, vm.email, vm.password, vm.again)
+            .then(function (response) {
+              // success
+              onLogin();
+            }, function (reason) {
+              if(reason.data.error_description !== undefined){
+                vm.errorMessage = reason.data.error_description;
+              }
+              else{
+                vm.errorMessage = reason.data;
+              }
+            });
+      }
+
+
+      function onLogin() {
+        $rootScope.$broadcast('authorized');
+        $state.go('menu.login');
+      }
+
+
+      vm.email = '';
+      vm.password ='';
+      vm.again = '';
+      vm.firstName = '';
+      vm.lastName = '';
+      vm.errorMessage = '';
+    })
+
+  .controller('myAccountCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+    // You can include any angular dependencies as parameters for this function
+    // TIP: Access Route Parameters for your page via $stateParams.parameterName
+    function($scope, $stateParams) {
+
+
+    }
+  ])
+
+  .controller('movieDetailsCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+    // You can include any angular dependencies as parameters for this function
+    // TIP: Access Route Parameters for your page via $stateParams.parameterName
+    function ($scope, $stateParams) {
+
+
+    }
+    ])
+
+
+
+   .controller('moviesCtrl', ['$scope', '$http',
+    function ($scope, $http, $state) {
+
+        var apiKey = '7baae7b093159f1876fbe91176adcb32';
+        var popularMoviesEndpoint = "https://api.themoviedb.org/3/movie/popular";
+        var page = 0;
+
+        $scope.movieList = [];
+
+        // creating a function for getting the movie list. we use this function when loading next page is needed
+        $scope.getMovieList = function () {
+
+            var url = popularMoviesEndpoint + '?page=' + ++page + '&api_key=' + apiKey; // generating the url
+
+            $http({method: 'GET', url: url}).
+              success(function (data, status, headers, config) {
+
+                  if (status == 200) {
+                      page = data.page;                                             // saving current page for pagination
+                      $scope.movieList.push.apply($scope.movieList, data.results)   // appending new movies to current list
+                  } else {
+                      console.error('Error happened while getting the movie list.')
+                  }
+
+              }).
+              error(function (data, status, headers, config) {
+                  console.error('Error happened while getting the movie list.')
               });
         }
 
+        $scope.getMovieList();    // calling the function when script is loaded for the first time
 
-        function onLogin() {
-          $rootScope.$broadcast('authorized');
-          $state.go('menu.login');
-        }
-
-
-        vm.email = '';
-        vm.password ='';
-        vm.again = '';
-        vm.firstName = '';
-        vm.lastName = '';
-        vm.errorMessage = '';
-      })
-
-.controller('myAccountCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+        $scope.goMovieDetails = function($state){
+        $state.go('movieDetails');
+      }
 
 
-}])
 
-.controller('moviesCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+    }]
+)
 
-
-}])
-
-.controller('tVShowsCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+  .controller('tVShowsCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+    // You can include any angular dependencies as parameters for this function
+    // TIP: Access Route Parameters for your page via $stateParams.parameterName
+    function($scope, $stateParams) {
 
 
-}])
+    }
+  ])
 
-.controller('favouritesCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+  .controller('favouritesCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+    // You can include any angular dependencies as parameters for this function
+    // TIP: Access Route Parameters for your page via $stateParams.parameterName
+    function($scope, $stateParams) {
 
 
-}])
+    }
+  ])

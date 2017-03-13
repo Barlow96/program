@@ -1,26 +1,19 @@
 <ion-view title="Movies" id="page7">
-  <ion-content padding="true" class="has-header">
-    <div id="movies-container1" class="row">
-      <div id="movies-container2" class="col">
-        <h3 id="movies-heading1" style="color:#000000;font-weight:300;text-align:center;">Heading</h3>
-        <div style="margin: 0px; line-height: 250px; background-color: rgb(232, 235, 239); text-align: center;">
-          <i class="icon ion-image" style="font-size: 64px; color: rgb(136, 136, 136); vertical-align: middle;"></i>
+    <ion-content padding="true" class="has-header">
+
+        <div class="row" style="flex-wrap: wrap;">
+            <div class="col col-33" ng-repeat="movie in movieList">
+
+                <div style="margin: 0px; background-color: rgb(232, 235, 239); text-align: center;">
+                  <a ui-sref="menu.movieDetails">
+                    <img ng-src="http://image.tmdb.org/t/p/w370/{{movie.poster_path}}" style="font-size: 64px; color: rgb(136, 136, 136); vertical-align: middle; width: 100%" />
+                  </a>
+                </div>
+            </div>
         </div>
-        <div id="movies-button-bar1" class="button-bar">
-          <a ui-sref="menu.page" id="movies-button8" class="button button-positive  button-block icon ion-eye"></a>
-          <button id="movies-button9" class="button button-positive  button-block icon ion-ios-star"></button>
-        </div>
-      </div>
-      <div id="movies-container3" class="col">
-        <h3 id="movies-heading2" style="color:#000000;font-weight:300;text-align:center;">Heading</h3>
-        <div style="margin: 0px; line-height: 250px; background-color: rgb(232, 235, 239); text-align: center;">
-          <i class="icon ion-image" style="font-size: 64px; color: rgb(136, 136, 136); vertical-align: middle;"></i>
-        </div>
-        <div id="movies-button-bar2" class="button-bar">
-          <button id="movies-button11" class="button button-positive  button-block icon ion-eye"></button>
-          <button id="movies-button12" class="button button-positive  button-block icon ion-ios-star"></button>
-        </div>
-      </div>
-    </div>
-  </ion-content>
+
+        <button ng-click="getMovieList()" ng-hide="movieList.length == 0">get more movies</button>
+        <p ng-show="movieList.length == 0">loading movies</p>
+
+    </ion-content>
 </ion-view>

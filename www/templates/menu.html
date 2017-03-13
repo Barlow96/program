@@ -33,6 +33,12 @@
         <ion-item class="item-icon-right" id="menu-list-item6" ui-sref="menu.favourites" menu-close="">Favourites
           <i class="icon ion-ios-star"></i>
         </ion-item>
+          <span ng-if="vm.username">
+              <ion-item class="item-icon-right" id="menu-list-item7" ui-sref="menu.login" menu-close="">
+                  Loggged in
+                  <i class="icon ion-locked"></i>
+              </ion-item>
+          </span>
       </ion-list>
     </ion-content>
   </ion-side-menu>

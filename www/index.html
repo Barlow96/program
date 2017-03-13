@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title></title>
 
-    
-    
+
+
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
@@ -16,16 +16,23 @@
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
 
-    
+
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-    
+
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+    <!-- Backand SDK -->
+    <script src="lib/backand-vanilla-sdk/dist/backand.js"></script>
+    <script src="lib/backand-angular1-sdk/dist/backand.provider.js"></script>
+
 
     <style type="text/css">
       .platform-ios .manual-ios-statusbar-padding{
         padding-top:20px;
       }
       .manual-remove-top-padding{
-        padding-top:0px; 
+        padding-top:0px;
       }
       .manual-remove-top-padding .scroll{
         padding-top:0px !important;
@@ -52,14 +59,15 @@
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
     <script src="js/routes.js"></script>
-    
-     
-    <script src="js/directives.js"></script>
-     
-    <script src="js/services.js"></script>
-    
 
-    <!-- Only required for Tab projects w/ pages in multiple tabs 
+
+    <script src="js/directives.js"></script>
+
+    <script src="js/services.js"></script>
+
+
+
+    <!-- Only required for Tab projects w/ pages in multiple tabs
     <script src="lib/ionicuirouter/ionicUIRouter.js"></script>
     -->
 
@@ -70,6 +78,11 @@
     <ion-nav-bar class="bar-stable">
       <ion-nav-back-button></ion-nav-back-button>
     </ion-nav-bar>
+    <!--
+  The views will be rendered in the <ion-nav-view> directive below
+  Templates are in the /templates folder (but you could also
+  have templates inline in this html file if you'd like).
+-->
     <ion-nav-view></ion-nav-view>
   </div>
 </div>

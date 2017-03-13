@@ -1,0 +1,46 @@
+{
+  "name": "backand-vanilla-sdk",
+  "description": "Backand SDK for JavaScript",
+  "version": "1.1.2",
+  "main": [
+    "dist/backand.js"
+  ],
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "src",
+    "package.json",
+    ".babelrc",
+    ".gitignore",
+    "gulpfile.babel.js"
+  ],
+  "dependencies": {},
+  "authors": [
+    "Backand"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/backand/vanilla-sdk.git"
+  },
+  "homepage": "https://github.com/backand/vanilla-sdk#readme",
+  "keywords": [
+    "Backand",
+    "backend",
+    "backend sdk",
+    "backend js",
+    "backend javascript",
+    "vanilla-sdk",
+    "backend vanilla sdk"
+  ],
+  "private": false,
+  "_release": "1.1.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.1.2",
+    "commit": "6ea66bf4a115079d587bf711a2a9c3c9d2211adc"
+  },
+  "_source": "https://github.com/backand/vanilla-sdk.git",
+  "_target": "1.1.2",
+  "_originalSource": "backand-vanilla-sdk"
+}
