@@ -5,12 +5,18 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services',])
+angular.module('app', ['ionic', 'backand', 'app.controllers', 'app.routes', 'app.directives','app.services',])
 
-.config(function($ionicConfigProvider, $sceDelegateProvider){
-  
+.config(function (BackandProvider, $stateProvider, $httpProvider) {
+      // change here to your appName
+      BackandProvider.setAppName('unimovietv');
 
-  $sceDelegateProvider.resourceUrlWhitelist([ 'self','*://www.youtube.com/**', '*://player.vimeo.com/video/**']);
+      BackandProvider.setSignUpToken('3eda9297-10f7-4062-a243-1d766523b3d2');
+
+      // token is for anonymous login. see http://docs.backand.com/en/latest/apidocs/security/index.html#anonymous-access
+      BackandProvider.setAnonymousToken('328e8bea-b26c-40a6-83a5-0e00a11cac8a');
+
+      $httpProvider.interceptors.push('APIInterceptor');
 
 })
 
@@ -35,7 +41,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 */
 .directive('disableSideMenuDrag', ['$ionicSideMenuDelegate', '$rootScope', function($ionicSideMenuDelegate, $rootScope) {
     return {
-        restrict: "A",  
+        restrict: "A",
         controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
 
             function stopDrag(){
@@ -70,7 +76,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
       attrs.$observe('hrefInappbrowser', function(val){
         href = val;
       });
-      
+
       element.bind('click', function (event) {
 
         window.open(href, '_system', 'location=yes');

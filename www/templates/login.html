@@ -1,19 +1,41 @@
-<ion-view title="Login" id="page4">
-  <ion-content padding="true" scroll="false" class="has-header">
-    <form id="login-form1" class="list">
-      <ion-list id="login-list2">
-        <label class="item item-input" id="login-input1">
-          <span class="input-label">Username</span>
-          <input type="text" placeholder="">
+<ion-view view-title="Login" id="page4">
+  <div class="bar bar-subheader">
+    <!-- LIST -->
+    <div class="buttons">
+      <span ng-if="vm.username" class="cancel-create">login as {{vm.username}} -
+          <a ng-click="vm.signout()" href="" class="">sign out</a></span>
+    </div>
+  </div>
+  <ion-content class="padding has-subheader" scroll="false">
+    <form ng-submit="vm.signin()">
+      <div class="list">
+
+        <label class="item item-input">
+          <input id="email" name="email" type="email" placeholder="Your email" ng-model="vm.email">
         </label>
-        <label class="item item-input" id="login-input2">
-          <span class="input-label">Password</span>
-          <input type="password" placeholder="">
+        <label class="item item-input">
+          <input id="password" name="password" type="password" placeholder="Your password" ng-model="vm.password">
         </label>
-      </ion-list>
-      <div class="spacer" style="height: 40px;"></div>
-      <a ui-sref="menu.home" id="login-button1" class="button button-stable  button-block">Log in</a>
-      <a ui-sref="menu.signup" id="login-button2" class="button button-positive  button-block button-clear">Or create an account</a>
+      </div>
+      <div class="">
+        <button class="button button-block button-stable" type="submit">
+          Login
+        </button>
+      </div>
+      <div class="button-bar">
+        <button class="button button-positive icon-left ion-social-facebook" ng-click="vm.socialSignin('facebook')" type="button">
+          Facebook
+        </button>
+        <button class="button button-dark icon-left ion-social-facebook ion-social-github" ng-click="vm.socialSignin('github')" type="button">
+          Github
+        </button>
+        <button class="button button-assertive icon-left ion-social-googleplus" ng-click="vm.socialSignin('google')" type="button">
+          Google+
+        </button>
+      </div>
     </form>
+    <a href="#/side-menu21/signup" id="login-button2" class="button button-positive  button-block button-clear">Or create an account</a>
+
+    <h4 style="color:red;" ng-bind="vm.error"></h4>
   </ion-content>
 </ion-view>

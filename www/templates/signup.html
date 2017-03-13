@@ -1,21 +1,56 @@
 <ion-view title="Signup" id="page5">
-  <ion-content padding="true" scroll="false" class="has-header">
-    <form id="signup-form2" class="list">
-      <ion-list id="signup-list3">
-        <label class="item item-input" id="signup-input3">
-          <span class="input-label">Name</span>
-          <input type="text" placeholder="">
-        </label>
-        <label class="item item-input" id="signup-input4">
-          <span class="input-label">Username</span>
-          <input type="text" placeholder="">
-        </label>
-        <label class="item item-input" id="signup-input5">
-          <span class="input-label">Password</span>
-          <input type="text" placeholder="">
-        </label>
-      </ion-list>
-      <button id="signup-button3" class="button button-stable  button-block">Sign up</button>
-    </form>
-  </ion-content>
-</ion-view>
+    <ion-content class="padding has-subheader">
+      <form ng-submit="vm.signup()">
+        <div class="list">
+          <div class="row">
+            <div class="col">
+              <label class="item item-input">
+                <input id="email" name="email" type="email" placeholder="Your email"
+                       ng-model="vm.email">
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label class="item item-input">
+                <input id="firstname" name="firstname" type="text" placeholder="Your first name"
+                       ng-model="vm.firstName">
+              </label>
+            </div>
+            <div class="col">
+              <label class="item item-input">
+                <input id="username" name="lastname" type="text" placeholder="Your last name"
+                       ng-model="vm.lastName">
+              </label>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+
+              <label class="item item-input">
+                <input id="password" name="password" type="password" placeholder="Your password"
+                       ng-model="vm.password">
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+
+              <label class="item item-input">
+                <input id="again" name="again" type="password" placeholder="confirm your password"
+                       ng-model="vm.again">
+              </label>
+            </div>
+          </div>
+          <h4 style="color:red;" ng-bind="vm.errorMessage"></h4>
+
+          <div class="">
+            <button class="button button-block button-stable" type="submit">
+              SignUp
+            </button>
+          </div>
+        </div>
+      </form>
+    </ion-content>
+  </ion-view>
