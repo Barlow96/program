@@ -1,6 +1,12 @@
-﻿<ion-view title="Movie Details" id="page10" hide-back-button="true">
+﻿<ion-view title="Movie Details" id="page10">
   <ion-nav-buttons side="left">
     <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
 </ion-nav-buttons>
-    <ion-content padding="true" class="has-header"></ion-content>
+    <ion-content padding="true" class="has-header">
+
+      <img ng-src="http://image.tmdb.org/t/p/w370/{{poster}}" style="font-size: 64px; color: rgb(136, 136, 136); vertical-align: middle; width: 100%" />
+      <h3> {{moviename}}</h2>
+        <p>{{overview}}</p>
+
+    </ion-content>
 </ion-view>

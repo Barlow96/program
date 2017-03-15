@@ -3,9 +3,8 @@
 
         <div class="row" style="flex-wrap: wrap;">
             <div class="col col-33" ng-repeat="movie in movieList">
-
                 <div style="margin: 0px; background-color: rgb(232, 235, 239); text-align: center;">
-                  <a ui-sref="menu.movieDetails">
+                  <a ui-sref="menu.movieDetails({movieID: {{movie.id}} })">
                     <img ng-src="http://image.tmdb.org/t/p/w370/{{movie.poster_path}}" style="font-size: 64px; color: rgb(136, 136, 136); vertical-align: middle; width: 100%" />
                   </a>
                 </div>

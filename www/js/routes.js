@@ -67,10 +67,11 @@ angular.module('app.routes', [])
   })
 
   .state('menu.movieDetails', {
-    url: '/movieDetails',
+    url: '/movieDetails?movieID',
     views: {
       'side-menu21': {
-    templateUrl: 'templates/movieDetails.html'
+    templateUrl: 'templates/movieDetails.html',
+    controller: 'movieDetailsCtrl'
   }
 }
   })

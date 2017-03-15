@@ -135,14 +135,42 @@ angular.module('app.controllers', [])
     }
   ])
 
-  .controller('movieDetailsCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+  .controller('movieDetailsCtrl', ['$location', '$http', '$scope', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
     // You can include any angular dependencies as parameters for this function
     // TIP: Access Route Parameters for your page via $stateParams.parameterName
-    function ($scope, $stateParams) {
+    function ($location, $http, $scope) {
+
+      var movieID = $scope.movieID;
+       $scope.movieID = $location.search();
+       $scope.movieid = $scope.movieID["movieID"]
 
 
-    }
-    ])
+       var apiKey = '7baae7b093159f1876fbe91176adcb32';
+       var movieDetailEndpoint = "https://api.themoviedb.org/3/movie/";
+       var movieID = $scope.movieid;
+
+       // creating a function for getting the movie list. we use this function when loading next page is needed
+       $scope.getMovieDetails = function () {
+
+         var url = movieDetailEndpoint + movieID + '?api_key=' + apiKey; // generating the url
+         $scope.movieDetails = [];
+         console.log(url);
+         $http({
+
+           method: 'GET',
+           url: url
+
+         })
+         .then(function (response) {
+           $scope.poster = response.data.poster_path;
+           $scope.moviename = response.data.title;
+           $scope.overview = response.data.overview;
+         })
+       }
+
+      $scope.getMovieDetails();
+  }]
+)
 
 
 
@@ -166,6 +194,7 @@ angular.module('app.controllers', [])
                   if (status == 200) {
                       page = data.page;                                             // saving current page for pagination
                       $scope.movieList.push.apply($scope.movieList, data.results)   // appending new movies to current list
+                      console.log($scope.movieList);
                   } else {
                       console.error('Error happened while getting the movie list.')
                   }
@@ -177,12 +206,6 @@ angular.module('app.controllers', [])
         }
 
         $scope.getMovieList();    // calling the function when script is loaded for the first time
-
-        $scope.goMovieDetails = function($state){
-        $state.go('movieDetails');
-      }
-
-
 
     }]
 )
