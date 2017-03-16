@@ -172,6 +172,49 @@ angular.module('app.controllers', [])
   }]
 )
 
+.controller('searchCtrl', ['$http', '$scope',
+function ($http, $scope, $state) {
+
+  $scope.searchTerm = "";
+  var apiKey = '7baae7b093159f1876fbe91176adcb32';
+  https://api.themoviedb.org/3/search/movie?api_key=###&query=tron
+  var searchMoviesEndpoint = "https://api.themoviedb.org/3/search/movie/";
+  var page = 0;
+
+  $scope.movieList = [];
+
+  // creating a function for getting the movie list. we use this function when loading next page is needed
+  $scope.getMovieList = function () {
+
+      var url = searchMoviesEndpoint + '?api_key=' + apiKey + '&query=' + $scope.searchTerm; // generating the url
+
+      $http({method: 'GET', url: url}).
+        success(function (data, status, headers, config) {
+
+            if (status == 200) {
+                $scope.movieList.push.apply($scope.movieList, data.results)   // appending new movies to current list
+                console.log(url);
+            } else {
+                console.error('Error happened while getting the movie list.')
+            }
+
+        }).
+        error(function (data, status, headers, config) {
+            console.error('Error happened while getting the movie list.')
+        });
+  $scope.movieList = [];
+  }
+
+  $scope.search = function () {
+    console.log($scope.searchTerm);
+    $scope.searchTerm = $scope.search.term;
+
+    $scope.getMovieList();
+  }
+
+}]
+)
+
 
 
    .controller('moviesCtrl', ['$scope', '$http',

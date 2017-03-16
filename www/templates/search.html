@@ -1,0 +1,29 @@
+<ion-view title="Search" id="page11">
+  <ion-content padding="true" class="has-header">
+
+    <div class="bar bar-header item-input-inset">
+      <label class="item-input-wrapper">
+          <i class="icon ion-ios7-search placeholder-icon"></i>
+          <input autocomplete="off" type="search" id="search" placeholder="Search" ng-model="search.term">
+        </label>
+      <button class="button ion-chevron-right button-clear button-dark" ng-click="search()">
+        </button>
+    </div>
+
+    <div class="row" style="flex-wrap: wrap;">
+      <div <div class="col col-33" ng-repeat="movie in movieList">
+            <div style="margin: 0px; background-color: rgb(232, 235, 239); text-align: center;">
+              <a ui-sref="menu.movieDetails({movieID: {{movie.id}} })">
+                <div ng-if="movie.poster_path != null">
+                  <img ng-src="http://image.tmdb.org/t/p/w370/{{movie.poster_path}}" style="font-size: 64px; color: rgb(136, 136, 136); vertical-align: middle; width: 100%" />
+                </div>
+                <div ng-if="movie.poster_path == null">
+                  <img ng-src="https://placeholdit.imgix.net/~text?txtsize=60&txt={{movie.title}}&w=370&h=555&txttrack=0" style="font-size: 64px; color: rgb(136, 136, 136); vertical-align: middle; width: 100%" />
+                </div>
+              </a>
+            </div>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

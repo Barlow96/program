@@ -10,7 +10,7 @@
   </ion-side-menu-content>
   <ion-side-menu side="left" id="side-menu21">
     <ion-header-bar class="bar-stable">
-      <div class="title">Menu</div>
+      <div class="title">MyFlix</div>
     </ion-header-bar>
     <ion-content padding="false" class="side-menu-left has-header ">
       <ion-list id="menu-list1">
@@ -24,6 +24,9 @@
           <i class="icon ion-android-person"></i>
         </ion-item>
         <ion-item id="menu-list-item3"></ion-item>
+        <ion-item class="item-icon-right" id="menu-list-item7" ui-sref="menu.search" menu-close="">Search
+          <i class="icon ion-search"></i>
+        </ion-item>
         <ion-item class="item-icon-right" id="menu-list-item4" ui-sref="menu.movies" menu-close="">Movies
           <i class="icon ion-android-film"></i>
         </ion-item>
@@ -33,12 +36,6 @@
         <ion-item class="item-icon-right" id="menu-list-item6" ui-sref="menu.favourites" menu-close="">Favourites
           <i class="icon ion-ios-star"></i>
         </ion-item>
-          <span ng-if="vm.username">
-              <ion-item class="item-icon-right" id="menu-list-item7" ui-sref="menu.login" menu-close="">
-                  Loggged in
-                  <i class="icon ion-locked"></i>
-              </ion-item>
-          </span>
       </ion-list>
     </ion-content>
   </ion-side-menu>

@@ -46,6 +46,16 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('menu.search', {
+    url: '/search',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/search.html',
+        controller: 'searchCtrl'
+      }
+    }
+  })
+
   .state('menu.myAccount', {
     url: '/account',
     views: {
