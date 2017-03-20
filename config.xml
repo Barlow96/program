@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.uniproject454578" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>MyFlix</name>
+<widget id="com.ionicframework.myflix291837" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>myFlix</name>
   <description>
-        MyFlix
+        An Ionic Framework and Cordova project.
     </description>
-  <author email="contact@conorbarlow.co.uk" href="">
-      Conor Barlow
+  <author email="you@example.com" href="http://example.com/">
+      Your Name Here
     </author>
   <content src="index.html"/>
   <access origin="*"/>

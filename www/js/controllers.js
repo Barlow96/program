@@ -1,141 +1,245 @@
 angular.module('app.controllers', [])
 
-  .controller('homeCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-    // You can include any angular dependencies as parameters for this function
-    // TIP: Access Route Parameters for your page via $stateParams.parameterName
-    function($scope, $stateParams) {
+.controller('loginController',['$scope', '$firebaseArray', 'CONFIG', '$document', '$state', function($scope, $firebaseArray, CONFIG, $document, $state) {
 
 
+
+  // Perform the login action when the user submits the login form
+  $scope.doLogin = function(userLogin) {
+
+    console.log(userLogin);
+
+    if($document[0].getElementById("user_name").value != "" && $document[0].getElementById("user_pass").value != ""){
+
+
+        firebase.auth().signInWithEmailAndPassword(userLogin.username, userLogin.password).then(function() {
+          // Sign-In successful.
+          //console.log("Login successful");
+
+                    var user = firebase.auth().currentUser;
+
+                    var name, email, photoUrl, uid;
+
+                    if(user.emailVerified) { //check for verification email confirmed by user from the inbox
+
+                      console.log("email verified");
+                      $state.go("menu.home");
+
+                      name = user.displayName;
+                      email = user.email;
+                      photoUrl = user.photoURL;
+                      uid = user.uid;
+
+                      //console.log(name + "<>" + email + "<>" +  photoUrl + "<>" +  uid);
+
+                      localStorage.setItem("photo",photoUrl);
+
+                    }else{
+
+                        alert("Email not verified, please check your inbox or spam messages")
+                        return false;
+
+                    } // end check verification email
+
+
+        }, function(error) {
+          // An error happened.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log(errorCode);
+          if (errorCode === 'auth/invalid-email') {
+             alert('Enter a valid email.');
+             return false;
+          }else if (errorCode === 'auth/wrong-password') {
+             alert('Incorrect password.');
+             return false;
+          }else if (errorCode === 'auth/argument-error') {
+             alert('Password must be string.');
+             return false;
+          }else if (errorCode === 'auth/user-not-found') {
+             alert('No such user found.');
+             return false;
+          }else if (errorCode === 'auth/too-many-requests') {
+             alert('Too many failed login attempts, please try after sometime.');
+             return false;
+          }else if (errorCode === 'auth/network-request-failed') {
+             alert('Request timed out, please try again.');
+             return false;
+          }else {
+             alert(errorMessage);
+             return false;
+          }
+        });
+
+
+
+    }else{
+
+        alert('Please enter email and password');
+        return false;
+
+    }//end check client username password
+
+
+  };// end $scope.doLogin()
+
+}])
+
+.controller('appController',['$scope', '$firebaseArray', 'CONFIG', '$document', '$state', function($scope, $firebaseArray, CONFIG, $document, $state) {
+
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+
+      $document[0].getElementById("photo_user").src = localStorage.getItem("photo");
+
+
+    } else {
+      // No user is signed in.
+      $state.go("login");
     }
-  ])
-
-  .controller('menuCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-    // You can include any angular dependencies as parameters for this function
-    // TIP: Access Route Parameters for your page via $stateParams.parameterName
-    function($scope, $stateParams) {
+  });
 
 
-    }
-  ])
+  $scope.doLogout = function(){
 
-  .controller('loginCtrl', function($state, $rootScope, $scope, LoginService, $ionicHistory, $ionicPopup) {
+      firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+        //console.log("Logout successful");
+        $state.go("login");
 
-    var vm = this;
-
-    function signin() {
-      LoginService.signin(vm.email, vm.password)
-        .then(function () {
-          onLogin();
-        }, function (error) {
-            var alertPopup = $ionicPopup.alert({
-                title: 'Error',
-                template: 'Invalid Username or Password'
-            });
-          console.log(error)
-        })
-    }
-
-    function onLogin(username) {
-      $rootScope.$broadcast('authorized');
-      $ionicHistory.nextViewOptions({
-        disableBack: true
+      }, function(error) {
+        // An error happened.
+        console.log(error);
       });
-      $state.go('menu.home');
-      LoginService.getUsername()
-        .then(function(response) {
-          vm.username = username || response.data;
-        })
-    }
 
-    function signout() {
-      LoginService.signout()
-        .then(function() {
-          //$state.go('tab.login');
-          $rootScope.$broadcast('logout');
-          $state.reload();
-          vm.username = '';
-        })
-    }
-
-    function socialSignin(provider) {
-        LoginService.socialSignin(provider)
-            .then(onValidLogin, onErrorInLogin);
-
-      }
-
-      function socialSignup(provider) {
-        LoginService.socialSignup(provider)
-            .then(onValidLogin, onErrorInLogin);
-
-      }
-
-      var onValidLogin = function(response){
-        onLogin();
-        vm.username = response.data || vm.username;
-      };
-
-      var onErrorInLogin = function(rejection){
-        vm.error = rejection.data;
-        $rootScope.$broadcast('logout');
-
-      };
-
-      vm.username = '';
-      vm.error = '';
-      vm.signin = signin;
-      vm.signout = signout;
-      vm.socialSignup = socialSignup;
-      vm.socialSignin = socialSignin;
-
-  })
-
-  .controller('signupCtrl', function ($state, $rootScope, LoginService) {
-      var vm = this;
-
-      vm.signup = signup;
-
-      function signup(){
-        vm.errorMessage = '';
-
-        LoginService.signup(vm.firstName, vm.lastName, vm.email, vm.password, vm.again)
-            .then(function (response) {
-              // success
-              onLogin();
-            }, function (reason) {
-              if(reason.data.error_description !== undefined){
-                vm.errorMessage = reason.data.error_description;
-              }
-              else{
-                vm.errorMessage = reason.data;
-              }
-            });
-      }
+}// end dologout()
 
 
-      function onLogin() {
-        $rootScope.$broadcast('authorized');
-        $state.go('menu.login');
-      }
+
+}])
+
+.controller('resetController', ['$scope', '$state', '$document', '$firebaseArray', 'CONFIG', function($scope, $state, $document, $firebaseArray, CONFIG) {
+
+$scope.doResetemail = function(userReset) {
 
 
-      vm.email = '';
-      vm.password ='';
-      vm.again = '';
-      vm.firstName = '';
-      vm.lastName = '';
-      vm.errorMessage = '';
-    })
 
-  .controller('myAccountCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-    // You can include any angular dependencies as parameters for this function
-    // TIP: Access Route Parameters for your page via $stateParams.parameterName
-    function($scope, $stateParams) {
+    //console.log(userReset);
+
+    if($document[0].getElementById("ruser_name").value != ""){
 
 
-    }
-  ])
+        firebase.auth().sendPasswordResetEmail(userReset.rusername).then(function() {
+          // Sign-In successful.
+          //console.log("Reset email sent successful");
 
-  .controller('movieDetailsCtrl', ['$location', '$http', '$scope', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+          $state.go("login");
+
+
+        }, function(error) {
+          // An error happened.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log(errorCode);
+
+
+          if (errorCode === 'auth/user-not-found') {
+             alert('No user found with provided email.');
+             return false;
+          }else if (errorCode === 'auth/invalid-email') {
+             alert('Email you entered is not complete or invalid.');
+             return false;
+          }
+
+        });
+
+
+
+    }else{
+
+        alert('Please enter registered email to send reset link');
+        return false;
+
+    }//end check client username password
+
+
+  };// end $scope.doSignup()
+
+
+
+}])
+
+
+
+.controller('signupController', ['$scope', '$state', '$document', '$firebaseArray', 'CONFIG', function($scope, $state, $document, $firebaseArray, CONFIG) {
+
+$scope.doSignup = function(userSignup) {
+
+
+
+    //console.log(userSignup);
+
+    if($document[0].getElementById("cuser_name").value != "" && $document[0].getElementById("cuser_pass").value != ""){
+
+
+        firebase.auth().createUserWithEmailAndPassword(userSignup.cusername, userSignup.cpassword).then(function() {
+          // Sign-In successful.
+          //console.log("Signup successful");
+
+          var user = firebase.auth().currentUser;
+
+          user.sendEmailVerification().then(function(result) { console.log(result) },function(error){ console.log(error)});
+
+          user.updateProfile({
+            displayName: userSignup.displayname,
+            photoURL: userSignup.photoprofile
+          }).then(function() {
+            // Update successful.
+            $state.go("login");
+          }, function(error) {
+            // An error happened.
+            console.log(error);
+          });
+
+
+
+
+        }, function(error) {
+          // An error happened.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log(errorCode);
+
+          if (errorCode === 'auth/weak-password') {
+             alert('Password is weak, choose a strong password.');
+             return false;
+          }else if (errorCode === 'auth/email-already-in-use') {
+             alert('Email you entered is already in use.');
+             return false;
+          }
+
+
+
+
+        });
+
+
+
+    }else{
+
+        alert('Please enter email and password');
+        return false;
+
+    }//end check client username password
+
+
+  };// end $scope.doSignup()
+
+
+
+}])
+
+.controller('movieDetailsCtrl', ['$location', '$http', '$scope', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
     // You can include any angular dependencies as parameters for this function
     // TIP: Access Route Parameters for your page via $stateParams.parameterName
     function ($location, $http, $scope) {
@@ -177,7 +281,7 @@ function ($http, $scope, $state) {
 
   $scope.searchTerm = "";
   var apiKey = '7baae7b093159f1876fbe91176adcb32';
-  https://api.themoviedb.org/3/search/movie?api_key=###&query=tron
+  //https://api.themoviedb.org/3/search/movie?api_key=###&query=tron
   var searchMoviesEndpoint = "https://api.themoviedb.org/3/search/movie/";
   var page = 0;
 
@@ -253,20 +357,9 @@ function ($http, $scope, $state) {
     }]
 )
 
-  .controller('tVShowsCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-    // You can include any angular dependencies as parameters for this function
-    // TIP: Access Route Parameters for your page via $stateParams.parameterName
-    function($scope, $stateParams) {
+
+.controller('homeCtrl', ['$scope', '$firebaseArray', 'CONFIG', function($scope, $firebaseArray, CONFIG) {
+// TODO: Show profile data
 
 
-    }
-  ])
-
-  .controller('favouritesCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-    // You can include any angular dependencies as parameters for this function
-    // TIP: Access Route Parameters for your page via $stateParams.parameterName
-    function($scope, $stateParams) {
-
-
-    }
-  ])
+}]);

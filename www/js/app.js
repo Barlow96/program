@@ -3,88 +3,33 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
-angular.module('app', ['ionic', 'backand', 'app.controllers', 'app.routes', 'app.directives','app.services',])
+angular.module('app', ['ionic','firebase','app.configs', 'app.routes', 'app.controllers', 'app.services', 'app.directives'])
 
-.config(function (BackandProvider, $stateProvider, $httpProvider) {
-      // change here to your appName
-      BackandProvider.setAppName('unimovietv');
-
-      BackandProvider.setSignUpToken('3eda9297-10f7-4062-a243-1d766523b3d2');
-
-      // token is for anonymous login. see http://docs.backand.com/en/latest/apidocs/security/index.html#anonymous-access
-      BackandProvider.setAnonymousToken('328e8bea-b26c-40a6-83a5-0e00a11cac8a');
-
-      $httpProvider.interceptors.push('APIInterceptor');
-
-})
-
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform,CONFIG) {
   $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+    if(window.cordova && window.cordova.plugins.Keyboard) {
+      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+      // for form inputs)
+      // Don't remove this line unless you know what you are doing. It stops the viewport
+      // from snapping when text inputs are focused. Ionic handles this internally for
+      // a much nicer keyboard experience.
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
+
+
     }
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
+    if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+
+    firebase.initializeApp({
+      apiKey: CONFIG.FIREBASE_API,
+      authDomain: CONFIG.FIREBASE_AUTH_DOMAIN,
+      databaseURL: CONFIG.FIREBASE_DB_URL,
+      storageBucket: CONFIG.FIREBASE_STORAGE,
+      messagingSenderId: CONFIG.FIREBASE_STORAGE
+    });
+
+
   });
 })
-
-/*
-  This directive is used to disable the "drag to open" functionality of the Side-Menu
-  when you are dragging a Slider component.
-*/
-.directive('disableSideMenuDrag', ['$ionicSideMenuDelegate', '$rootScope', function($ionicSideMenuDelegate, $rootScope) {
-    return {
-        restrict: "A",
-        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
-
-            function stopDrag(){
-              $ionicSideMenuDelegate.canDragContent(false);
-            }
-
-            function allowDrag(){
-              $ionicSideMenuDelegate.canDragContent(true);
-            }
-
-            $rootScope.$on('$ionicSlides.slideChangeEnd', allowDrag);
-            $element.on('touchstart', stopDrag);
-            $element.on('touchend', allowDrag);
-            $element.on('mousedown', stopDrag);
-            $element.on('mouseup', allowDrag);
-
-        }]
-    };
-}])
-
-/*
-  This directive is used to open regular and dynamic href links inside of inappbrowser.
-*/
-.directive('hrefInappbrowser', function() {
-  return {
-    restrict: 'A',
-    replace: false,
-    transclude: false,
-    link: function(scope, element, attrs) {
-      var href = attrs['hrefInappbrowser'];
-
-      attrs.$observe('hrefInappbrowser', function(val){
-        href = val;
-      });
-
-      element.bind('click', function (event) {
-
-        window.open(href, '_system', 'location=yes');
-
-        event.preventDefault();
-        event.stopPropagation();
-
-      });
-    }
-  };
-});
