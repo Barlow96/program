@@ -1,4 +1,4 @@
-<ion-view title="Movies" id="page7">
+<ion-view title="Movies - Most Popular" id="page7">
     <ion-content padding="true" class="has-header">
 
         <div class="row" style="flex-wrap: wrap;">
@@ -11,8 +11,8 @@
             </div>
         </div>
 
-        <button ng-click="getMovieList()" ng-hide="movieList.length == 0">get more movies</button>
-        <p ng-show="movieList.length == 0">loading movies</p>
+        <button class="button button-block button-positive" ng-click="getMovieList()" ng-hide="movieList.length == 0">Load Extra Movies</button>
+        <p ng-show="movieList.length == 0">Loading Movies</p>
 
     </ion-content>
 </ion-view>

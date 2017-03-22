@@ -1,32 +1,29 @@
-<ion-view hide-back-button="false" title="Login" hide-nav-bar="false" >
+<ion-view hide-back-button="false" title="Login" hide-nav-bar="false">
   <ion-content class="has-header">
-  
-	<form name="form_login" ng-submit="doLogin(userLogin)" novalidate>
-	  	<div class="list">
-		  
-		  <label class="item item-input item-floating-label">
-		    <span class="input-label">Email</span>
-		    <input type="text" ng-model="$parent.userLogin.username" id="user_name" placeholder="Email">
-		  </label>
 
-		  <label class="item item-input item-floating-label">
-		    <span class="input-label">Password</span>
-		    <input type="text" ng-model="$parent.userLogin.password" id="user_pass" placeholder="Password">
-		  </label>
-		  
-		</div>
-		<div class="padding">
-			<button type="submit" class="button button-block button-calm">Login</button>
-		</div>
-	 </form>
+    <form name="form_login" ng-submit="doLogin(userLogin)" novalidate>
+      <div class="list">
 
-	 <div class="padding">
-	 <div class="padding">
-	    <button type="submit" class="button button-block button-calm" ui-sref="signup">Signup</button>
-	 </div>
-	 <div class="padding">
-		<button type="submit" class="button button-block button-calm" ui-sref="reset">Forgot Password</button>
-	 </div>	
-	
+        <label class="item item-input item-floating-label">
+            <input id="user_name" name="email" type="text" placeholder="Your email" ng-model="$parent.userLogin.username" autocomplete=false>
+        </label>
+
+        <label class="item item-input item-floating-label">
+            <input id="user_pass" name="password" type="password" placeholder="Your password" ng-model="$parent.userLogin.password" autocomplete=false>
+        </label>
+
+
+        <div class="padding">
+          <button type="submit" class="button button-block button-positive">Login</button>
+        </div>
+      </div>
+    </form>
+        <div class="padding">
+          <button type="submit" class="button button-block button-positive" ui-sref="signup">Signup</button>
+        </div>
+        <div class="padding">
+          <button type="submit" class="button button-block button-positive" ui-sref="reset">Forgot Password</button>
+        </div>
+
   </ion-content>
 </ion-view>

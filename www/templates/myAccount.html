@@ -2,16 +2,12 @@
   <ion-content padding="true" class="has-header">
     <form id="myAccount-form4" class="list">
       <label class="item item-input" id="myAccount-input10">
-        <span class="input-label">Name</span>
-        <input type="text" placeholder="">
+        <span class="input-label">Display Name</span>
+        <input type="text" placeholder="" value="{{username}}" readonly>
       </label>
       <label class="item item-input" id="myAccount-input11">
         <span class="input-label">Email</span>
-        <input type="email" placeholder="" value="{{vm.username}}">
-      </label>
-      <label class="item item-input" id="myAccount-input12">
-        <span class="input-label">Password</span>
-        <input type="text" placeholder="">
+        <input type="email" placeholder="" value="{{email}}" readonly>
       </label>
     </form>
   </ion-content>

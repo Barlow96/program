@@ -83,12 +83,22 @@ angular.module('app.routes', [])
 }
   })
 
+  .state('menu.tvDetails', {
+    url: '/tvDetails?tvID',
+    views: {
+      'menuContent': {
+    templateUrl: 'templates/tvDetails.html',
+    controller: 'tvDetailsCtrl'
+  }
+  }
+  })
+
   .state('menu.tVShows', {
     url: '/tvshows',
     views: {
       'menuContent': {
         templateUrl: 'templates/tVShows.html',
-        controller: 'tVShowsCtrl'
+        controller: 'tvShowsCtrl'
       }
     }
   })
