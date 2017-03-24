@@ -112,12 +112,12 @@ angular.module('app.controllers', [])
 
   }])
 
-  .controller('appController', ['$scope', '$firebaseArray', 'CONFIG', '$document', '$state','$ionicLoading', function($scope, $firebaseArray, CONFIG, $document, $state, $ionicLoading) {
+  .controller('appController', ['$scope', '$firebaseArray', 'CONFIG', '$document', '$state', '$ionicLoading', function($scope, $firebaseArray, CONFIG, $document, $state, $ionicLoading) {
 
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
 
-      $document[0].getElementById("username").textContent= localStorage.getItem("loggedInUser");
+        $document[0].getElementById("username").textContent = localStorage.getItem("loggedInUser");
 
 
       } else {
@@ -229,13 +229,13 @@ angular.module('app.controllers', [])
             displayName: userSignup.displayname,
           }).then(function() {
 
-              var alertPopup = $ionicPopup.alert({
-                title: 'Success',
-                template: 'Account Created'
-              });
-              alertPopup.then(function(res) {
+            var alertPopup = $ionicPopup.alert({
+              title: 'Success',
+              template: 'Account Created'
+            });
+            alertPopup.then(function(res) {
 
-              });
+            });
             $state.go("login");
           }, function(error) {
             // An error happened.
@@ -406,69 +406,65 @@ angular.module('app.controllers', [])
   .controller('myAccountCtrl', ['$scope', '$firebaseArray', 'CONFIG', function($scope, $firebaseArray, CONFIG) {
     // TODO: Show profile data
 
-  firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    console.log('signed in')
-    var user = firebase.auth().currentUser;
-    console.log(user);
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        console.log('signed in')
+        var user = firebase.auth().currentUser;
+        console.log(user);
 
-    email = user.email;
-    $scope.email = email;
+        email = user.email;
+        $scope.email = email;
 
-    username = user.displayName;
-    $scope.username = username;
+        username = user.displayName;
+        $scope.username = username;
 
-  } else {
-    console.log(' No user is signed in')
-  }
-});
+      } else {
+        console.log(' No user is signed in')
+      }
+    });
 
-  }
-])
+  }])
 
-.controller('tvShowsCtrl', ['$scope', '$http',
-  function($scope, $http, $state) {
+  .controller('tvShowsCtrl', ['$scope', '$http',
+    function($scope, $http, $state) {
 
-    var apiKey = '7baae7b093159f1876fbe91176adcb32';
-    var popularTVEndpoint = "https://api.themoviedb.org/3/tv/popular";
-    var page = 0;
+      var apiKey = '7baae7b093159f1876fbe91176adcb32';
+      var popularTVEndpoint = "https://api.themoviedb.org/3/tv/popular";
+      var page = 0;
 
-    $scope.tvList = [];
+      $scope.tvList = [];
 
-    // creating a function for getting the movie list. we use this function when loading next page is needed
-    $scope.getTvList = function() {
+      // creating a function for getting the movie list. we use this function when loading next page is needed
+      $scope.getTvList = function() {
 
-      var url = popularTVEndpoint + '?page=' + ++page + '&api_key=' + apiKey; // generating the url
+        var url = popularTVEndpoint + '?page=' + ++page + '&api_key=' + apiKey; // generating the url
 
-      $http({
-        method: 'GET',
-        url: url
-      }).
-      success(function(data, status, headers, config) {
+        $http({
+          method: 'GET',
+          url: url
+        }).
+        success(function(data, status, headers, config) {
 
-        if (status == 200) {
-          page = data.page; // saving current page for pagination
-          $scope.tvList.push.apply($scope.tvList, data.results) // appending new movies to current list
-          console.log($scope.tvList);
-        } else {
+          if (status == 200) {
+            page = data.page; // saving current page for pagination
+            $scope.tvList.push.apply($scope.tvList, data.results) // appending new movies to current list
+            console.log($scope.tvList);
+          } else {
+            console.error('Error happened while getting the tv list.')
+          }
+
+        }).
+        error(function(data, status, headers, config) {
           console.error('Error happened while getting the tv list.')
-        }
+        });
+      }
 
-      }).
-      error(function(data, status, headers, config) {
-        console.error('Error happened while getting the tv list.')
-      });
+      $scope.getTvList(); // calling the function when script is loaded for the first time
+
     }
+  ])
 
-    $scope.getTvList(); // calling the function when script is loaded for the first time
-
-  }
-])
-
-.controller('tvDetailsCtrl', ['$location', '$http', '$scope', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-  // You can include any angular dependencies as parameters for this function
-  // TIP: Access Route Parameters for your page via $stateParams.parameterName
-  function($location, $http, $scope) {
+  .controller('tvDetailsCtrl', function($scope, $http, $q, $location) {
 
     var tvID = $scope.tvID;
     $scope.tvID = $location.search();
@@ -479,46 +475,51 @@ angular.module('app.controllers', [])
     var tvDetailEndpoint = "https://api.themoviedb.org/3/tv/";
     var tvID = $scope.tvid;
 
-    // creating a function for getting the movie list. we use this function when loading next page is needed
-    $scope.getTvDetails = function() {
+    var url = tvDetailEndpoint + tvID + '?api_key=' + apiKey; // generating the url
+    $scope.seasonDetails = [];
+    $scope.episodeData = [];
 
-      var url = tvDetailEndpoint + tvID + '?api_key=' + apiKey; // generating the url
-      $scope.tvDetails = [];
-      console.log(url);
-      $http({
-
+    var getSeasons = function() {
+      var data = "";
+      // the only change is right here
+      return $http({
           method: 'GET',
           url: url
-
         })
+
         .then(function(response) {
+          var tvSeasonDetails = [];
           $scope.poster = response.data.poster_path;
           $scope.tvname = response.data.name;
           $scope.overview = response.data.overview;
           $scope.seasons = response.data.number_of_seasons;
+          for (var i = 0; i < response.data.seasons.length; i++) {
+            tvSeasonDetails.push({
+              'season_number': response.data.seasons[i].season_number
+            })
+          }
+
+          $scope.seasonDetails = tvSeasonDetails;
+
         })
     }
 
-    $scope.getTvDetails2 = function() {
+    getSeasons().then(function() {
+      console.log($scope.seasonDetails);
+      var promises = {};
+      angular.forEach($scope.seasonDetails, function(tvSeason, key) {
+        promises[key] = $http.get('https://api.themoviedb.org/3/tv/' + tvID + '/season/' + tvSeason.season_number + '?api_key=7baae7b093159f1876fbe91176adcb32');
+      });
 
-      var url = 'https://api.themoviedb.org/3/tv/1399/season/1?api_key=7baae7b093159f1876fbe91176adcb32' // generating the url
-      $scope.tvDetails = [];
-      console.log(url);
-      $http({
+      $q.all(promises).then(function(episodesBySeasonNumber) {
+        angular.forEach(episodesBySeasonNumber, function(response) {
+          $scope.episodeData.push(response.data);
+        });
+      });
+    });
 
-          method: 'GET',
-          url: url
-
-        })
-        .then(function(response) {
-          $scope.texts = response.data.episodes[0].name;
-        })
-    }
-
-    $scope.getTvDetails();
-    $scope.getTvDetails2();
-  }
-])
+console.log($scope.episodeData);
+  })
 
 
   .controller('homeCtrl', ['$scope', '$firebaseArray', 'CONFIG', function($scope, $firebaseArray, CONFIG) {

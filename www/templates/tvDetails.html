@@ -8,7 +8,18 @@
       <h3> {{tvname}}</h2>
         <p>{{overview}}</p>
         <p>Number of Seaons: {{seasons}}</p>
-        <p>xxxx: {{texts}}</p>
+
+<ul>
+      <li ng-repeat="season in episodeData">{{season.name}}
+          <ul>
+              <li>
+                <img ng-src="http://image.tmdb.org/t/p/w370/{{season.poster_path}}" style="font-size: 64px; color: rgb(136, 136, 136); vertical-align: middle; width: 100%" />
+              </li>
+              <li ng-repeat="episode in season.episodes">{{episode.name}}</li>
+          </ul>
+          <br>
+      </li>
+  <ul>
 
     </ion-content>
 </ion-view>
