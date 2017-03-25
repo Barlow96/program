@@ -40,13 +40,14 @@ angular.module('app.controllers', [])
             $state.go("menu.home");
 
             name = user.displayName;
+            uid = user.uid;
             localStorage.setItem("loggedInUser", name)
+            localStorage.setItem("loggedInUserID", uid)
 
             $scope.name = name;
             console.log(name);
             email = user.email;
             console.log(email);
-            uid = user.uid;
             console.log(uid);
 
             //console.log(name + "<>" + email + "<>" +  photoUrl + "<>" +  uid);
@@ -280,19 +281,32 @@ angular.module('app.controllers', [])
 
   }])
 
-  .controller('movieDetailsCtrl', ['$location', '$http', '$scope', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+  .controller('movieDetailsCtrl', ['$location', '$http', '$scope', '$firebaseObject', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
     // You can include any angular dependencies as parameters for this function
     // TIP: Access Route Parameters for your page via $stateParams.parameterName
-    function($location, $http, $scope) {
+    function($location, $http, $scope, $firebaseObject, $ionicPopup) {
 
-      var movieID = $scope.movieID;
       $scope.movieID = $location.search();
-      $scope.movieid = $scope.movieID["movieID"]
+      $scope.movieID = parseInt($scope.movieID["movieID"], 10);
+
+      console.log($scope.movieID);
 
 
       var apiKey = '7baae7b093159f1876fbe91176adcb32';
       var movieDetailEndpoint = "https://api.themoviedb.org/3/movie/";
-      var movieID = $scope.movieid;
+      var movieID = $scope.movieID;
+      $scope.moviename = "";
+      $scope.movieData = [];
+
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          var user = firebase.auth().currentUser;
+          $scope.userID = user.uid;
+          console.log($scope.userID);
+        } else {
+          console.log(' No user is signed in')
+        }
+      });
 
       // creating a function for getting the movie list. we use this function when loading next page is needed
       $scope.getMovieDetails = function() {
@@ -310,10 +324,42 @@ angular.module('app.controllers', [])
             $scope.poster = response.data.poster_path;
             $scope.moviename = response.data.title;
             $scope.overview = response.data.overview;
+            $scope.movieData = response.data;
+
           })
       }
 
       $scope.getMovieDetails();
+
+      $scope.addToFavs = function() {
+        var movieData = $scope.movieData;
+        var result;
+
+        var checkRef = firebase.database().ref('users/' + $scope.userID + '/favourites/movies/');
+        checkRef.once("value")
+        .then(function(snapshot) {
+
+          if (snapshot.child($scope.movieID).exists() == true) {
+            result = " already exists in your favourites";
+            $scope.showPopup();
+          }else{
+            result = " has been added to your favourites";
+            var ref = firebase.database().ref();
+
+            ref.child('users/' + $scope.userID + '/favourites/movies/' + $scope.movieID  ).set( {
+               movieData
+             });
+             $scope.showPopup();
+          };
+        });
+
+        $scope.showPopup = function() {
+          var alertPopup = $ionicPopup.alert({
+            title: 'Favourite',
+            template: $scope.moviename + result
+          });
+        }
+      }
     }
   ])
 
@@ -322,7 +368,7 @@ angular.module('app.controllers', [])
 
       $scope.searchTerm = "";
       var apiKey = '7baae7b093159f1876fbe91176adcb32';
-      var searchMoviesEndpoint = "https://api.themoviedb.org/3/search/movie/";
+      var searchMoviesEndpoint = "https://api.themoviedb.org/3/search/movie";
       var page = 0;
 
       $scope.movieList = [];
@@ -330,7 +376,8 @@ angular.module('app.controllers', [])
       // creating a function for getting the movie list. we use this function when loading next page is needed
       $scope.getMovieList = function() {
 
-        var url = searchMoviesEndpoint + '?api_key=' + apiKey + '&query=' + $scope.searchTerm; // generating the url
+        var url = searchMoviesEndpoint + '?api_key=' + apiKey + '&query=' + $scope.searchTerm;  // generating the url
+        console.log(url);
 
         $http({
           method: 'GET',
@@ -522,8 +569,24 @@ console.log($scope.episodeData);
   })
 
 
-  .controller('homeCtrl', ['$scope', '$firebaseArray', 'CONFIG', function($scope, $firebaseArray, CONFIG) {
-    // TODO: Show profile data
+  .controller('homeCtrl', ['$rootScope', '$scope', '$firebaseArray', 'CONFIG', function($scope, $rootScope,$firebaseArray, CONFIG) {
+    $scope.favourites = [];
+    $scope.userID = localStorage.loggedInUserID;
 
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        var user = firebase.auth().currentUser;
+        $scope.userID = user.uid;
+      } else {
+        console.log("No user signed in");
+      }
+    });
+
+    var checkRef = firebase.database().ref('users/' + $scope.userID + '/favourites/movies/');
+     checkRef.once("value")
+     .then(function(snapshot) {
+       $scope.favourites = snapshot.val();
+       console.log($scope.favourites);
+       });
 
   }]);

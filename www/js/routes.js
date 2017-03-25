@@ -34,6 +34,7 @@ angular.module('app.routes', [])
 
 
     .state('menu.home', {
+    cache: false,
     url: '/home',
     views: {
       'menuContent': {

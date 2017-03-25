@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('app', ['ionic','firebase','app.configs', 'app.routes', 'app.controllers', 'app.services', 'app.directives'])
 
-.run(function($ionicPlatform,CONFIG) {
+.run(function($rootScope, $ionicPlatform,CONFIG) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -30,6 +30,7 @@ angular.module('app', ['ionic','firebase','app.configs', 'app.routes', 'app.cont
       messagingSenderId: CONFIG.FIREBASE_STORAGE
     });
 
+    $rootScope.userID = 0;
 
   });
 })
