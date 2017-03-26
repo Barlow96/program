@@ -1,5 +1,39 @@
 angular.module('app.controllers', [])
 
+.filter('myLimitTo', [function(){
+    return function(obj, limit){
+        var keys = Object.keys(obj);
+        if(keys.length < 1){
+            return [];
+        }
+
+        var ret = new Object,
+        count = 0;
+        angular.forEach(keys, function(key, arrayIndex){
+           if(count >= limit){
+                return false;
+            }
+            ret[key] = obj[key];
+            count++;
+        });
+        return ret;
+    };
+}])
+
+.filter('orderByDayNumber', function() {
+  return function(items, field, reverse) {
+    var filtered = [];
+    angular.forEach(items, function(item) {
+      filtered.push(item);
+    });
+    filtered.sort(function (a, b) {
+      return (a[field] < b[field] ? 1 : -1);
+    });
+    if(reverse) filtered.reverse();
+    return filtered;
+  };
+})
+
   .controller('loginController', ['$scope', '$firebaseArray', 'CONFIG', '$document', '$state', '$ionicPopup', '$ionicLoading', function($scope, $firebaseArray, CONFIG, $document, $state, $ionicPopup, $ionicLoading) {
 
 
@@ -345,9 +379,9 @@ angular.module('app.controllers', [])
           }else{
             result = " has been added to your favourites";
             var ref = firebase.database().ref();
-
             ref.child('users/' + $scope.userID + '/favourites/movies/' + $scope.movieID  ).set( {
-               movieData
+              movieData,
+              addedOn : firebase.database.ServerValue.TIMESTAMP
              });
              $scope.showPopup();
           };
@@ -569,7 +603,7 @@ console.log($scope.episodeData);
   })
 
 
-  .controller('homeCtrl', ['$rootScope', '$scope', '$firebaseArray', 'CONFIG', function($scope, $rootScope,$firebaseArray, CONFIG) {
+  .controller('homeCtrl', ['$rootScope', '$scope', '$firebaseArray', 'CONFIG', '$filter', function($scope, $rootScope,$firebaseArray, CONFIG,$filter) {
     $scope.favourites = [];
     $scope.userID = localStorage.loggedInUserID;
 
@@ -583,10 +617,11 @@ console.log($scope.episodeData);
     });
 
     var checkRef = firebase.database().ref('users/' + $scope.userID + '/favourites/movies/');
+
      checkRef.once("value")
      .then(function(snapshot) {
        $scope.favourites = snapshot.val();
        console.log($scope.favourites);
-       });
+     });
 
   }]);
