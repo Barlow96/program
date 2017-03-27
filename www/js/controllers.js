@@ -34,6 +34,14 @@ angular.module('app.controllers', [])
   };
 })
 
+.filter('myCurrency', ['$filter', function($filter) {
+        return function(input) {
+            input = parseFloat(input);
+            input = input.toFixed(input % 1 === 0 ? 0 : 2);
+            return '$' + input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        };
+    }])
+
   .controller('loginController', ['$scope', '$firebaseArray', 'CONFIG', '$document', '$state', '$ionicPopup', '$ionicLoading', function($scope, $firebaseArray, CONFIG, $document, $state, $ionicPopup, $ionicLoading) {
 
 
@@ -331,6 +339,9 @@ angular.module('app.controllers', [])
       var movieID = $scope.movieID;
       $scope.moviename = "";
       $scope.movieData = [];
+      $scope.rating = {};
+      $scope.rating.max = 5;
+      $scope.rating.rate = 0;
 
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
@@ -358,10 +369,29 @@ angular.module('app.controllers', [])
             $scope.poster = response.data.poster_path;
             $scope.moviename = response.data.title;
             $scope.overview = response.data.overview;
+            $scope.ratingnumber = response.data.vote_average;
+            $scope.runtime = response.data.runtime;
+            $scope.imdbID = response.data.imdb_id;
+            $scope.releasedate = response.data.release_date;
+            $scope.budget = response.data.budget;
+            $scope.revenue = response.data.revenue;
+            $scope.backdroppath = response.data.backdrop_path;
+            $scope.status = response.data.status;
+
+            $scope.backgroundImage = {
+              background: 'url(https://image.tmdb.org/t/p/w1066_and_h600_bestv2' + $scope.backdroppath,
+              'background-repeat': 'no-repeat',
+              'background-size': 'auto 100%',
+              'background-position': 'center'
+            };
+
             $scope.movieData = response.data;
+            $scope.rating.max = 5;
+            $scope.rating.rate = response.data.vote_average / 2;
 
           })
       }
+
 
       $scope.getMovieDetails();
 
@@ -606,15 +636,6 @@ console.log($scope.episodeData);
   .controller('homeCtrl', ['$rootScope', '$scope', '$firebaseArray', 'CONFIG', '$filter', function($scope, $rootScope,$firebaseArray, CONFIG,$filter) {
     $scope.favourites = [];
     $scope.userID = localStorage.loggedInUserID;
-
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        var user = firebase.auth().currentUser;
-        $scope.userID = user.uid;
-      } else {
-        console.log("No user signed in");
-      }
-    });
 
     var checkRef = firebase.database().ref('users/' + $scope.userID + '/favourites/movies/');
 

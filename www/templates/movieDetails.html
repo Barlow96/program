@@ -1,14 +1,133 @@
-﻿<ion-view title="{{moviename}}" id="page10">
+
+<ion-view title="{{moviename}}" id="page10">
   <ion-nav-buttons side="left">
     <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
-</ion-nav-buttons>
-    <ion-content padding="true" class="has-header">
+  </ion-nav-buttons>
+  <ion-content padding="true" class="has-header moviedetails" ng-style="backgroundImage">
+    <div class="movie">
+    <div class="row">
+      <div class="col col-40">
+        <img ng-src="http://image.tmdb.org/t/p/w370/{{poster}}" style="font-size: 64px; color: rgb(136, 136, 136); vertical-align: middle; width: 100%" />
+      </div>
+    <div class="col col-60">
+      <div class="moviename">
+         {{moviename}}
+       </div>
 
-      <img ng-src="http://image.tmdb.org/t/p/w370/{{poster}}" style="font-size: 64px; color: rgb(136, 136, 136); vertical-align: middle; width: 100%" />
-      <h3> {{moviename}}</h2>
-        <p>{{overview}}</p>
+       <div class="releasedate">
+         {{releasedate}}
+       </div>
+
+      <div class="starrating">
+        <rating ng-model="rating.rate" max="rating.max"></rating>
+      </div>
+      <div class="ratingno">
+        ({{ratingnumber}})
+      </div>
+
+      <div class="runtime">
+        {{runtime}} minutes
+      </div>
+
+    </div>
+  </div>
 
 
-        <button class="button button-block button-positive" ng-click="addToFavs()">Add to Favourites</button>
-    </ion-content>
+<div class="details">
+  <div class="title">
+    Details
+  </div>
+
+  <hr>
+  <div class="entry">
+    <div class="detailName">
+      <span>Title</span>
+    </div>
+    <div class="information">
+      {{moviename}}
+    </div>
+  </div>
+  <hr>
+
+  <div class="entry">
+    <div class="detailName">
+      <span>Runtime</span>
+    </div>
+    <div class="information">
+      {{runtime}}
+    </div>
+  </div>
+<hr>
+
+  <div class="entry">
+    <div class="detailName">
+      <span>Budget</span>
+    </div>
+    <div class="information">
+      {{ budget | myCurrency}}
+    </div>
+  </div>
+<hr>
+
+<div class="entry">
+  <div class="detailName">
+    <span>Revenue</span>
+  </div>
+  <div class="information">
+    {{ revenue | myCurrency}}
+  </div>
+</div>
+<hr>
+
+  <div class="entry">
+    <div class="detailName">
+      <span>IMDB</span>
+    </div>
+    <div class="information">
+    <i class="fa fa-imdb fa-lg" aria-hidden="true"></i><span><i class="icon ion-chevron-right icon-accessory"></i></span>
+    </div>
+  </div>
+<hr>
+
+  <div class="entry">
+    <div class="detailName">
+      <span>Status</span>
+    </div>
+    <div class="information">
+      {{status}}
+    </div>
+  </div>
+  <hr>
+</div>
+
+<div class="overview">
+  <div class="title">
+    Overview
+  </div>
+  <hr>
+  <div class="entry">
+    <div class="information">
+      {{overview}}
+    </div>
+  </div>
+  <hr>
+</div>
+
+<div class="cast">
+  <div class="title">
+    Cast
+  </div>
+  <hr>
+  <div class="entry">
+    <div class="information">
+      {{overview}}
+    </div>
+  </div>
+  <hr>
+</div>
+
+
+      <button class="button button-block button-positive" ng-click="addToFavs()">Add to Favourites</button>
+    </div>
+  </ion-content>
 </ion-view>

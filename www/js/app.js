@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('app', ['ionic','firebase','app.configs', 'app.routes', 'app.controllers', 'app.services', 'app.directives'])
+angular.module('app', ['ionic','firebase','app.configs', 'app.routes', 'app.controllers', 'app.services', 'app.directives', 'ionic.rating'])
 
 .run(function($rootScope, $ionicPlatform,CONFIG) {
   $ionicPlatform.ready(function() {
@@ -28,7 +28,7 @@ angular.module('app', ['ionic','firebase','app.configs', 'app.routes', 'app.cont
       databaseURL: CONFIG.FIREBASE_DB_URL,
       storageBucket: CONFIG.FIREBASE_STORAGE,
       messagingSenderId: CONFIG.FIREBASE_STORAGE
-    });
+    })
 
     $rootScope.userID = 0;
 
